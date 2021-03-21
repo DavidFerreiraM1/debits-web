@@ -27,6 +27,7 @@
   ],
   "rules": {
     "import/order": "off",
+    "react/jsx-curly-brace-presence": 0,
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "import/newline-after-import": "off",
     "react-hooks/rules-of-hooks": "error",
