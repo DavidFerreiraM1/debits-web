@@ -1,0 +1,9 @@
+{
+  "editor.formatOnSave": true,
+  "explorer.compactFolders": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.rulers": [100, 120]
+}
