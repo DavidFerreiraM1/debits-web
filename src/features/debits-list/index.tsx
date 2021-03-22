@@ -3,6 +3,7 @@ import { Paper, Box, Hidden, Typography } from '@material-ui/core';
 import { styles } from './styles';
 import { BoxTransitionProvider, useBoxTransition } from './box-transition';
 import { List } from './list';
+import { ItemDetails } from './item-details';
 
 function DebitsListComponent() {
   const { transition } = useBoxTransition();
@@ -38,7 +39,7 @@ function DebitsListComponent() {
               elevation3: classes.elevation,
             }}
           >
-            {/*  */}
+            <ItemDetails />
           </Paper>
         </Box>
       </Hidden>

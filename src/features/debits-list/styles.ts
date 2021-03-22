@@ -77,4 +77,31 @@ export const styles = makeStyles(theme => ({
     position: 'relative',
     top: -16,
   },
+  itemDetailsRoot: {
+    height: '100%',
+    width: '100%',
+    padding: 32,
+  },
+  itemDetailsContent: {
+    height: '100%',
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+  },
+  itemDetailsBody: {},
+  itemDetail: {
+    margin: '16px 0',
+  },
+  itemDetailActionHeader: {
+    height: 0,
+    position: 'relative',
+    top: -16,
+    right: 16,
+  },
+  itemDetailAction: {
+    height: 0,
+    position: 'relative',
+    top: -16,
+    right: 16,
+  },
 }));
