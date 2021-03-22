@@ -58,7 +58,7 @@ function DebitsListComponent() {
           }}
         >
           <Box className={classes.boxListPaperTitle}>
-            <Typography component="h5">Lista de débitos</Typography>
+            <Typography component="h5">Lista de devedores</Typography>
           </Box>
           <Box className={classes.boxListPaperContent}>
             <List />

@@ -7,7 +7,7 @@ export const styles = makeStyles(theme => ({
     zIndex: 1,
     height: 'calc(100vh - 120px)',
     width: '100%',
-    maxWidth: 480,
+    maxWidth: 560,
     borderRadius: 8,
     left: '50%',
     transform: 'translateX(-50%)',
@@ -42,7 +42,7 @@ export const styles = makeStyles(theme => ({
   },
   boxTransitionToRight: {
     [theme.breakpoints.up('lg')]: {
-      transform: 'translateX(-24%)',
+      transform: 'translateX(-22%)',
     },
   },
   boxTransitionToLeft: {
@@ -65,12 +65,12 @@ export const styles = makeStyles(theme => ({
   },
   paperInfoItemToRight: {
     [theme.breakpoints.up('lg')]: {
-      transform: 'translateX(-136%)',
+      transform: 'translateX(-138.5%)',
     },
   },
   paperInfoItemToLeft: {
     [theme.breakpoints.up('lg')]: {
-      transform: 'translateX(-75%)',
+      transform: 'translateX(-80%)',
     },
   },
   boxListSubheader: {
