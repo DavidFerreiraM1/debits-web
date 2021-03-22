@@ -1,7 +1,7 @@
 export interface OpenFuncParam {
   title: string;
   text: string;
-  action: () => void;
+  onConfirm: () => void;
 }
 
 export interface DialogRefProps {
