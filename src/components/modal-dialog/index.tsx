@@ -21,7 +21,9 @@ function ModaDialogWithRef(props: Props, ref: React.Ref<DialogRefProps>) {
     render: false,
     title: '',
     text: '',
-    action: () => {},
+    onConfirm: () => {
+      //
+    },
   });
 
   const handleClose = () => {
@@ -30,18 +32,20 @@ function ModaDialogWithRef(props: Props, ref: React.Ref<DialogRefProps>) {
       render: false,
       title: '',
       text: '',
-      action: () => {},
+      onConfirm: () => {
+        //
+      },
     });
   };
 
   React.useImperativeHandle(ref, () => ({
-    open: ({ title, text, action }: OpenFuncParam) => {
+    open: ({ title, text, onConfirm }: OpenFuncParam) => {
       setDialog({
         ...dialog,
         title,
         text,
         render: true,
-        action,
+        onConfirm,
       });
     },
     close: () => handleClose(),
@@ -66,7 +70,7 @@ function ModaDialogWithRef(props: Props, ref: React.Ref<DialogRefProps>) {
           color="primary"
           onClick={() => {
             handleClose();
-            dialog.action();
+            dialog.onConfirm();
           }}
         >
           Confirmar
