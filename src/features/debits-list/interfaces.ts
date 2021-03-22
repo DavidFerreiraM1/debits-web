@@ -7,3 +7,8 @@ export interface BoxTransitionProviderProps {
 export interface BoxTransitionProps {
   children: React.ReactChild;
 }
+
+export interface ItemListDebit {
+  username: string;
+  price: string;
+}

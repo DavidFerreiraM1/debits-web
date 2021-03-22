@@ -1,10 +1,11 @@
 import React from 'react';
-import { Paper, Box, Button, Hidden } from '@material-ui/core';
+import { Paper, Box, Hidden, Typography } from '@material-ui/core';
 import { styles } from './styles';
 import { BoxTransitionProvider, useBoxTransition } from './box-transition';
+import { List } from './list';
 
 function DebitsListComponent() {
-  const { spread, retract, transition } = useBoxTransition();
+  const { transition } = useBoxTransition();
   const classes = styles();
 
   const setStyleTransition = () => {
@@ -17,14 +18,6 @@ function DebitsListComponent() {
     return transition
       ? classes.paperInfoItemToRight
       : classes.paperInfoItemToLeft;
-  };
-
-  const handleTransition = () => {
-    if (transition) {
-      retract();
-    } else {
-      spread();
-    }
   };
 
   return (
@@ -45,7 +38,7 @@ function DebitsListComponent() {
               elevation3: classes.elevation,
             }}
           >
-            <Box />
+            {/*  */}
           </Paper>
         </Box>
       </Hidden>
@@ -64,8 +57,11 @@ function DebitsListComponent() {
             elevation3: classes.elevation,
           }}
         >
-          <Box className={classes.paperContent}>
-            <Button onClick={handleTransition}>Testar animação</Button>
+          <Box className={classes.boxListPaperTitle}>
+            <Typography component="h5">Lista de débitos</Typography>
+          </Box>
+          <Box className={classes.boxListPaperContent}>
+            <List />
           </Box>
         </Paper>
       </Box>

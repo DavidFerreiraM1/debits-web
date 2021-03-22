@@ -15,6 +15,18 @@ export const styles = makeStyles(theme => ({
   boxListPaper: {
     height: '100%',
     width: '100%',
+    overflow: 'hidden',
+    paddingBottom: 64,
+  },
+  boxListPaperTitle: {
+    padding: '16px 16px 8px 16px',
+  },
+  boxListPaperContent: {
+    height: '100%',
+    width: '100%',
+    overflow: 'scroll',
+    overflowX: 'hidden',
+    paddingTop: 0,
   },
   elevation: {
     boxShadow: '0px 0px 16px -4px #404040',
@@ -60,5 +72,9 @@ export const styles = makeStyles(theme => ({
     [theme.breakpoints.up('lg')]: {
       transform: 'translateX(-75%)',
     },
+  },
+  boxListSubheader: {
+    position: 'relative',
+    top: -16,
   },
 }));
