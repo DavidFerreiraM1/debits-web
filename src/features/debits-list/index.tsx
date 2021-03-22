@@ -1,11 +1,7 @@
 import React from 'react';
 import { Paper, Box, Button, Hidden } from '@material-ui/core';
 import { styles } from './styles';
-import {
-  BoxTransitionRight,
-  BoxTransitionProvider,
-  useBoxTransition,
-} from './box-transition';
+import { BoxTransitionProvider, useBoxTransition } from './box-transition';
 
 function DebitsListComponent() {
   const { spread, retract, transition } = useBoxTransition();
