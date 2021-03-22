@@ -8,7 +8,9 @@ export interface BoxTransitionProps {
   children: React.ReactChild;
 }
 
-export interface ItemListDebit {
+export interface ItemListDebitProps {
+  id: string;
   username: string;
-  price: string;
+  debitValue: string;
+  openModal(title: string, text: string, onConfirm: () => void): void;
 }
