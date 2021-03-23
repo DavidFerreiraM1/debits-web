@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import React from 'react';
 import {
   IconButton,
@@ -16,6 +17,10 @@ import { ItemListDebitProps } from './interfaces';
 
 import { DialogRefProps } from '../../components/modal-dialog/interface';
 import { ModalDialog } from '../../components';
+import { useDebitListContext } from './list-context';
+import { IClientUser } from '../../core/interfaces';
+import { getUsersService } from './services';
+import { formatMoney } from '../../utils/format-money';
 
 export function ItemList(props: ItemListDebitProps) {
   const { spread } = useBoxTransition();
@@ -36,7 +41,7 @@ export function ItemList(props: ItemListDebitProps) {
       <ListItemIcon>
         <LocalAtmIcon />
       </ListItemIcon>
-      <ListItemText primary={username} secondary={debitValue} />
+      <ListItemText primary={username} secondary={formatMoney(debitValue)} />
       <ListItemSecondaryAction>
         <IconButton onClick={onConfirm}>
           <DeleteIcon />
@@ -48,6 +53,8 @@ export function ItemList(props: ItemListDebitProps) {
 
 export function List() {
   const modal = React.createRef<DialogRefProps>();
+  const { debitList } = useDebitListContext();
+
   const openModal = (title: string, text: string, onConfirm: () => void) => {
     modal.current?.open({
       title,
@@ -55,33 +62,41 @@ export function List() {
       onConfirm,
     });
   };
+
+  const [users, setUsers] = React.useState<IClientUser[]>([]);
+  React.useEffect(() => {
+    const getUsers = async () => {
+      const { data } = await getUsersService();
+
+      if (data && data.length > 0) {
+        setUsers(data);
+      }
+    };
+
+    getUsers();
+  }, []);
+
+  const getUser = React.useCallback(
+    (id: string) => {
+      return users.find(usr => usr.id === parseInt(id, 10));
+    },
+    [users],
+  );
+
   return (
     <>
       <MuiList component="ul">
-        <ItemList
-          id="0"
-          username="Fulano de tal"
-          debitValue="R$ 3.000,00"
-          openModal={openModal}
-        />
-        <ItemList
-          id="1"
-          username="Fulano de tal"
-          debitValue="R$ 3.000,00"
-          openModal={openModal}
-        />
-        <ItemList
-          id="2"
-          username="Fulano de tal"
-          debitValue="R$ 3.000,00"
-          openModal={openModal}
-        />
-        <ItemList
-          id="3"
-          username="Fulano de tal"
-          debitValue="R$ 3.000,00"
-          openModal={openModal}
-        />
+        {debitList.map((deb, key) => {
+          return (
+            <ItemList
+              key={key}
+              id={`${deb?.id}`}
+              username={getUser(`${deb?.idUsuario}`)?.name || ''}
+              debitValue={deb.valor.toString()}
+              openModal={openModal}
+            />
+          );
+        })}
       </MuiList>
       <>
         <ModalDialog ref={modal} />
