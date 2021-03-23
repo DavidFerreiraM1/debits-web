@@ -28,15 +28,15 @@ export function ItemDetails() {
         <Box className={classes.itemDetailsBody}>
           <Box className={classes.itemDetail}>
             <Typography variant="subtitle2">Cliente</Typography>
-            <Typography component="span">Fulano de tal</Typography>
+            <Typography component="span">{dataDetails.username}</Typography>
           </Box>
           <Box className={classes.itemDetail}>
             <Typography variant="subtitle2">Motivo</Typography>
-            <Typography component="span">Fulano de tal</Typography>
+            <Typography component="span">{dataDetails.reason}</Typography>
           </Box>
           <Box className={classes.itemDetail}>
             <Typography variant="subtitle2">Valor</Typography>
-            <Typography component="span">RS 3.000,00</Typography>
+            <Typography component="span">{dataDetails.debitValue}</Typography>
           </Box>
         </Box>
       </Box>

@@ -5,6 +5,7 @@ import { styles } from './styles';
 import { BoxTransitionProvider, useBoxTransition } from './box-transition';
 import { List } from './list';
 import { ItemDetails } from './item-details';
+import { ListContextProvider } from './list-context';
 
 function DebitsListComponent() {
   const { transition } = useBoxTransition();
@@ -73,10 +74,12 @@ function DebitsListComponent() {
 
 export const DebitsList = () => {
   return (
-    <DebitsFormProvider>
-      <BoxTransitionProvider>
-        <DebitsListComponent />
-      </BoxTransitionProvider>
-    </DebitsFormProvider>
+    <ListContextProvider>
+      <DebitsFormProvider>
+        <BoxTransitionProvider>
+          <DebitsListComponent />
+        </BoxTransitionProvider>
+      </DebitsFormProvider>
+    </ListContextProvider>
   );
 };

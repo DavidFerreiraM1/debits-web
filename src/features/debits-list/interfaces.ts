@@ -8,6 +8,10 @@ export interface BoxTransitionProps {
   children: React.ReactChild;
 }
 
+export interface ListContextProviderProps {
+  children: React.ReactChild;
+}
+
 export interface ItemListDebitProps {
   id: string;
   username: string;
