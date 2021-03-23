@@ -29,8 +29,7 @@ export interface IClientUser {
 
 export interface IDebit {
   id?: number;
-  userId: number;
-  reason: string;
-  debitDate: string;
-  debitValue: number;
+  idUsuario: number;
+  motivo: string;
+  valor: number;
 }
