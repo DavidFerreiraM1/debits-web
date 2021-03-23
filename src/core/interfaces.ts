@@ -28,7 +28,7 @@ export interface IClientUser {
 }
 
 export interface IDebit {
-  id?: number;
+  _id?: number;
   idUsuario: number;
   motivo: string;
   valor: number;
