@@ -1,11 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/require-default-props */
 import React from 'react';
-import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItem from '@material-ui/core/ListItem';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -13,8 +9,23 @@ import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import { TransitionProps } from '@material-ui/core/transitions';
+import {
+  Box,
+  Button,
+  Container,
+  FormHelperText,
+  Grid,
+  InputLabel,
+  TextField as MuiTextField,
+} from '@material-ui/core';
+import AutoComplete from '@material-ui/lab/Autocomplete';
+import { useFormik } from 'formik';
+
 import { styles } from './styles';
 import { DebitsFormProps } from './interfaces';
+import { getUsersService } from './service';
+import { debitFormValidation } from './validations';
+import { formatMoney } from '../../utils/format-money';
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & { children?: React.ReactElement },
@@ -39,6 +50,37 @@ export function DebitsFormProvider(props: DebitsFormProps) {
   const classes = styles();
   const { children } = props;
   const [open, setOpen] = React.useState(false);
+  const [options, setOptions] = React.useState<
+    { label: string; value: number }[]
+  >([]);
+
+  React.useEffect(() => {
+    const getUsers = async () => {
+      const { data } = await getUsersService();
+
+      if (data && data.length > 0) {
+        const opts = data.map(user => ({
+          label: user.name,
+          value: user?.id || 0,
+        }));
+        setOptions(opts);
+      }
+    };
+    getUsers();
+  }, []);
+
+  const formik = useFormik({
+    initialValues: {
+      user: { label: '', value: 0 },
+      reason: '',
+      debitValue: 'R$ 0,00',
+    },
+    validationSchema: debitFormValidation,
+    validateOnChange: false,
+    onSubmit: (values: any) => {
+      console.log(values);
+    },
+  });
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -82,25 +124,101 @@ export function DebitsFormProvider(props: DebitsFormProps) {
               <CloseIcon />
             </IconButton>
             <Typography variant="h6" className={classes.title}>
-              Sound
+              Editar Dados da Dívida
             </Typography>
-            <Button autoFocus color="inherit" onClick={handleClose}>
-              save
-            </Button>
           </Toolbar>
         </AppBar>
-        <List>
-          <ListItem button>
-            <ListItemText primary="Phone ringtone" secondary="Titania" />
-          </ListItem>
-          <Divider />
-          <ListItem button>
-            <ListItemText
-              primary="Default notification ringtone"
-              secondary="Tethys"
-            />
-          </ListItem>
-        </List>
+        <Container className={classes.containerForm} maxWidth="md">
+          {/* FORMULÁRIO */}
+          <form>
+            <Grid container spacing={4}>
+              <Grid item xs={12}>
+                <InputLabel>User</InputLabel>
+                <AutoComplete
+                  id="users"
+                  options={options}
+                  getOptionLabel={opt => opt.label}
+                  getOptionSelected={(opt, val) => opt.value === val.value}
+                  onChange={(event, param: any) => {
+                    if (!param) {
+                      formik.setValues({
+                        ...formik.values,
+                        user: { label: '', value: 0 },
+                      });
+                    } else {
+                      formik.setValues({
+                        ...formik.values,
+                        user: { label: param.label, value: param.value },
+                      });
+                    }
+                  }}
+                  value={formik.values.user}
+                  renderInput={params => (
+                    <MuiTextField {...params} variant="outlined" fullWidth />
+                  )}
+                />
+                <FormHelperText id="user-errors">
+                  {formik.errors.user?.label}
+                </FormHelperText>
+              </Grid>
+              <Grid item xs={12}>
+                <InputLabel>Motivo</InputLabel>
+                <MuiTextField
+                  fullWidth
+                  variant="outlined"
+                  id="reason"
+                  name="reason"
+                  value={formik.values.reason}
+                  onChange={formik.handleChange}
+                />
+                <FormHelperText id="reason-errors">
+                  {formik.errors.reason}
+                </FormHelperText>
+              </Grid>
+              <Grid item xs={6}>
+                <InputLabel>Valor</InputLabel>
+                <MuiTextField
+                  fullWidth
+                  variant="outlined"
+                  id="debitValue"
+                  name="debitValue"
+                  value={formik.values.debitValue}
+                  onChange={event =>
+                    formik.setValues({
+                      ...formik.values,
+                      debitValue: formatMoney(event.target.value),
+                    })
+                  }
+                />
+                <FormHelperText id="debitValue-errors">
+                  {formik.errors.debitValue}
+                </FormHelperText>
+              </Grid>
+              <Grid item xs={12}>
+                <Box className={classes.formBottom}>
+                  <Box component="div" display="flex" justifyContent="flex-end">
+                    <Box padding="0 8px">
+                      <Button variant="outlined" onClick={handleClose}>
+                        cancelar
+                      </Button>
+                    </Box>
+                    <Box paddingLeft="8px">
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => formik.handleSubmit()}
+                      >
+                        Atualizar
+                        {/* { idDebitToUpdate ? 'Atualizar' : 'Concluir' } */}
+                      </Button>
+                    </Box>
+                  </Box>
+                </Box>
+              </Grid>
+            </Grid>
+          </form>
+          {/* ========== */}
+        </Container>
       </Dialog>
     </NewDebitContext.Provider>
   );
