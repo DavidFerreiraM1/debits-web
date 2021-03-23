@@ -15,6 +15,7 @@ export interface ListContextProviderProps {
 export interface ItemListDebitProps {
   id: string;
   username: string;
+  reason: string;
   debitValue: string;
   openModal(title: string, text: string, onConfirm: () => void): void;
 }
