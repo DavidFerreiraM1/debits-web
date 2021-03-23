@@ -13,4 +13,11 @@ export const styles = makeStyles(theme => ({
     paddingTop: 32,
   },
   formBottom: {},
+  alert: {
+    position: 'fixed',
+    top: 72,
+    right: 0,
+    margin: 24,
+    zIndex: 20000,
+  },
 }));

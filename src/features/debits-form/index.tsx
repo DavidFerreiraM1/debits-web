@@ -21,11 +21,13 @@ import {
 import AutoComplete from '@material-ui/lab/Autocomplete';
 import { useFormik } from 'formik';
 
-import { styles } from './styles';
-import { DebitsFormProps } from './interfaces';
-import { getUsersService } from './service';
-import { debitFormValidation } from './validations';
 import { formatMoney } from '../../utils/format-money';
+
+import { getUsersService, postDebitService } from './service';
+import { DebitsFormProps } from './interfaces';
+import { debitFormValidation } from './validations';
+import { styles } from './styles';
+import { useDebitListContext } from '../debits-list/list-context';
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & { children?: React.ReactElement },
@@ -49,10 +51,19 @@ const NewDebitContext = React.createContext<{
 export function DebitsFormProvider(props: DebitsFormProps) {
   const classes = styles();
   const { children } = props;
+  const { updateDebitList } = useDebitListContext();
   const [open, setOpen] = React.useState(false);
   const [options, setOptions] = React.useState<
     { label: string; value: number }[]
   >([]);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   React.useEffect(() => {
     const getUsers = async () => {
@@ -78,17 +89,28 @@ export function DebitsFormProvider(props: DebitsFormProps) {
     validationSchema: debitFormValidation,
     validateOnChange: false,
     onSubmit: (values: any) => {
-      console.log(values);
+      const postDebit = async () => {
+        const { success } = await postDebitService({
+          idUsuario: values.user.value,
+          motivo: values.reason,
+          valor: parseFloat(
+            values.debitValue
+              .toString()
+              .trim()
+              .replace('R$', '')
+              .replaceAll('.', '')
+              .replaceAll(',', '.'),
+          ),
+        });
+        if (success) {
+          updateDebitList();
+          formik.resetForm();
+          handleClose();
+        }
+      };
+      postDebit();
     },
   });
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   const newDebit = () => {
     handleClickOpen();
@@ -96,6 +118,7 @@ export function DebitsFormProvider(props: DebitsFormProps) {
 
   const updateDebit = () => {
     // console.log(id);
+    // recebe id, busca os dados e preenche o form
     handleClickOpen();
   };
 
