@@ -10,7 +10,12 @@ const BoxTransitionContext = React.createContext<{
     debitValue: string;
   };
   transition: boolean;
-  spread: (id: string) => void;
+  spread: (
+    id: string,
+    username: string,
+    reason: string,
+    debitValue: string,
+  ) => void;
   retract: () => void;
 }>({
   dataDetails: {
@@ -39,13 +44,18 @@ export function BoxTransitionProvider(props: BoxTransitionProviderProps) {
     debitValue: '',
   });
 
-  const spread = (id: string) => {
+  const spread = (
+    id: string,
+    username: string,
+    reason: string,
+    debitValue: string,
+  ) => {
     // buscar na api pelo id
     setData({
       id,
-      username: 'Fulano de tal',
-      reason: 'Compra de um carro modelo BMW',
-      debitValue: 'R$ 250.000,00',
+      username,
+      reason,
+      debitValue,
     });
   };
 
