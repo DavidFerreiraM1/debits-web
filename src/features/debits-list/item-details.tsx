@@ -4,6 +4,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { styles } from './styles';
 import { useBoxTransition } from './box-transition';
 import { useDebitFormContext } from '../debits-form';
+import { formatMoney } from '../../utils/format-money';
 
 export function ItemDetails() {
   const { retract, dataDetails } = useBoxTransition();
@@ -36,7 +37,11 @@ export function ItemDetails() {
           </Box>
           <Box className={classes.itemDetail}>
             <Typography variant="subtitle2">Valor</Typography>
-            <Typography component="span">{dataDetails.debitValue}</Typography>
+            <Typography component="span">
+              {dataDetails.debitValue
+                ? formatMoney(dataDetails.debitValue)
+                : ''}
+            </Typography>
           </Box>
         </Box>
       </Box>
