@@ -7,5 +7,5 @@ export const JsonPlaceholderClientApi = Axios.create({
 });
 
 export const DebitClientApi = Axios.create({
-  baseURL: `${debitsBaseUrl}/?uuid=${process.env.REACT_APP_UUID}`,
+  baseURL: `${debitsBaseUrl}`,
 });
