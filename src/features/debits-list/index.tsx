@@ -1,6 +1,8 @@
 import React from 'react';
-import { Paper, Box, Hidden, Typography } from '@material-ui/core';
-import { DebitsFormProvider } from '../debits-form';
+import { Paper, Box, Hidden, Typography, Fab } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
+
+import { DebitsFormProvider, useDebitFormContext } from '../debits-form';
 import { styles } from './styles';
 import { BoxTransitionProvider, useBoxTransition } from './box-transition';
 import { List } from './list';
@@ -9,6 +11,7 @@ import { ListContextProvider } from './list-context';
 
 function DebitsListComponent() {
   const { transition } = useBoxTransition();
+  const { newDebit } = useDebitFormContext();
   const classes = styles();
 
   const setStyleTransition = () => {
@@ -65,6 +68,11 @@ function DebitsListComponent() {
           </Box>
           <Box className={classes.boxListPaperContent}>
             <List />
+          </Box>
+          <Box className={classes.createDebitBox}>
+            <Fab onClick={newDebit} color="primary">
+              <AddIcon />
+            </Fab>
           </Box>
         </Paper>
       </Box>
