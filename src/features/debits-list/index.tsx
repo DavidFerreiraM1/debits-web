@@ -1,5 +1,6 @@
 import React from 'react';
 import { Paper, Box, Hidden, Typography } from '@material-ui/core';
+import { DebitsFormProvider } from '../debits-form';
 import { styles } from './styles';
 import { BoxTransitionProvider, useBoxTransition } from './box-transition';
 import { List } from './list';
@@ -72,8 +73,10 @@ function DebitsListComponent() {
 
 export const DebitsList = () => {
   return (
-    <BoxTransitionProvider>
-      <DebitsListComponent />
-    </BoxTransitionProvider>
+    <DebitsFormProvider>
+      <BoxTransitionProvider>
+        <DebitsListComponent />
+      </BoxTransitionProvider>
+    </DebitsFormProvider>
   );
 };

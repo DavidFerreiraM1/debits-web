@@ -3,10 +3,19 @@ import { Box, Button, IconButton, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import { styles } from './styles';
 import { useBoxTransition } from './box-transition';
+import { useDebitFormContext } from '../debits-form';
 
 export function ItemDetails() {
-  const { retract } = useBoxTransition();
+  const { retract, dataDetails } = useBoxTransition();
+  const { updateDebit } = useDebitFormContext();
+
   const classes = styles();
+
+  const updateHandler = () => {
+    if (dataDetails.id) {
+      updateDebit(dataDetails.id);
+    }
+  };
 
   return (
     <Box className={classes.itemDetailsRoot}>
@@ -32,7 +41,7 @@ export function ItemDetails() {
         </Box>
       </Box>
       <Box className={classes.itemDetailAction}>
-        <Button>Editar</Button>
+        <Button onClick={updateHandler}>Editar</Button>
       </Box>
     </Box>
   );
