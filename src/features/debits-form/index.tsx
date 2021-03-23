@@ -23,7 +23,12 @@ import { useFormik } from 'formik';
 
 import { formatMoney } from '../../utils/format-money';
 
-import { getUsersService, postDebitService } from './service';
+import {
+  getUsersService,
+  postDebitService,
+  getDebitByIdService,
+  putDebitService,
+} from './service';
 import { DebitsFormProps } from './interfaces';
 import { debitFormValidation } from './validations';
 import { styles } from './styles';
@@ -53,17 +58,10 @@ export function DebitsFormProvider(props: DebitsFormProps) {
   const { children } = props;
   const { updateDebitList } = useDebitListContext();
   const [open, setOpen] = React.useState(false);
+  const [idDebit, setIdDebit] = React.useState('');
   const [options, setOptions] = React.useState<
     { label: string; value: number }[]
   >([]);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   React.useEffect(() => {
     const getUsers = async () => {
@@ -80,6 +78,14 @@ export function DebitsFormProvider(props: DebitsFormProps) {
     getUsers();
   }, []);
 
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const formik = useFormik({
     initialValues: {
       user: { label: '', value: 0 },
@@ -89,26 +95,50 @@ export function DebitsFormProvider(props: DebitsFormProps) {
     validationSchema: debitFormValidation,
     validateOnChange: false,
     onSubmit: (values: any) => {
-      const postDebit = async () => {
-        const { success } = await postDebitService({
-          idUsuario: values.user.value,
-          motivo: values.reason,
-          valor: parseFloat(
-            values.debitValue
-              .toString()
-              .trim()
-              .replace('R$', '')
-              .replaceAll('.', '')
-              .replaceAll(',', '.'),
-          ),
-        });
-        if (success) {
-          updateDebitList();
-          formik.resetForm();
-          handleClose();
-        }
-      };
-      postDebit();
+      if (idDebit) {
+        const putDebit = async () => {
+          const { success } = await putDebitService(idDebit, {
+            idUsuario: values.user.value,
+            motivo: values.reason,
+            valor: parseFloat(
+              values.debitValue
+                .toString()
+                .trim()
+                .replace('R$', '')
+                .replaceAll('.', '')
+                .replaceAll(',', ''),
+            ),
+          });
+          if (success) {
+            updateDebitList();
+            formik.resetForm();
+            handleClose();
+          }
+        };
+
+        putDebit();
+      } else {
+        const postDebit = async () => {
+          const { success } = await postDebitService({
+            idUsuario: values.user.value,
+            motivo: values.reason,
+            valor: parseFloat(
+              values.debitValue
+                .toString()
+                .trim()
+                .replace('R$', '')
+                .replaceAll('.', '')
+                .replaceAll(',', ''),
+            ),
+          });
+          if (success) {
+            updateDebitList();
+            formik.resetForm();
+            handleClose();
+          }
+        };
+        postDebit();
+      }
     },
   });
 
@@ -116,10 +146,24 @@ export function DebitsFormProvider(props: DebitsFormProps) {
     handleClickOpen();
   };
 
-  const updateDebit = () => {
-    // console.log(id);
-    // recebe id, busca os dados e preenche o form
-    handleClickOpen();
+  const updateDebit = (id: string) => {
+    const getDebit = async () => {
+      setIdDebit(id);
+      const { data } = await getDebitByIdService(id);
+      const { label, value }: any = options.find(
+        opt => opt.value === data?.idUsuario,
+      );
+      if (data) {
+        formik.setValues({
+          user: { label, value },
+          reason: data.motivo,
+          debitValue: formatMoney(`${data.valor}`),
+        });
+        handleClickOpen();
+      }
+    };
+
+    getDebit();
   };
 
   return (
@@ -133,7 +177,10 @@ export function DebitsFormProvider(props: DebitsFormProps) {
       <Dialog
         fullScreen
         open={open}
-        onClose={handleClose}
+        onClose={() => {
+          formik.resetForm();
+          handleClose();
+        }}
         TransitionComponent={Transition}
       >
         <AppBar className={classes.appBar}>
@@ -141,13 +188,16 @@ export function DebitsFormProvider(props: DebitsFormProps) {
             <IconButton
               edge="start"
               color="inherit"
-              onClick={handleClose}
               aria-label="close"
+              onClick={() => {
+                formik.resetForm();
+                handleClose();
+              }}
             >
               <CloseIcon />
             </IconButton>
             <Typography variant="h6" className={classes.title}>
-              Editar Dados da Dívida
+              {idDebit ? 'Editar Dados da Dívida' : 'Criar novas Dívidas'}
             </Typography>
           </Toolbar>
         </AppBar>
@@ -231,8 +281,7 @@ export function DebitsFormProvider(props: DebitsFormProps) {
                         color="primary"
                         onClick={() => formik.handleSubmit()}
                       >
-                        Atualizar
-                        {/* { idDebitToUpdate ? 'Atualizar' : 'Concluir' } */}
+                        {idDebit ? 'Atualizar' : 'Concluir'}
                       </Button>
                     </Box>
                   </Box>
