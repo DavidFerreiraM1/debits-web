@@ -1,3 +1,7 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable no-plusplus */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
 import {
@@ -18,14 +22,12 @@ import { ItemListDebitProps } from './interfaces';
 import { DialogRefProps } from '../../components/modal-dialog/interface';
 import { ModalDialog } from '../../components';
 import { useDebitListContext } from './list-context';
-import { IClientUser } from '../../core/interfaces';
 import { getUsersService } from './services';
 import { formatMoney } from '../../utils/format-money';
 
 export function ItemList(props: ItemListDebitProps) {
   const { spread } = useBoxTransition();
-  const { id, username, debitValue, openModal } = props;
-
+  const { id, username, reason, debitValue, openModal } = props;
   const onConfirm = () => {
     openModal(
       'Excluir Dívida',
@@ -37,7 +39,11 @@ export function ItemList(props: ItemListDebitProps) {
   };
 
   return (
-    <ListItem component="li" button onClick={() => spread(id)}>
+    <ListItem
+      component="li"
+      button
+      onClick={() => spread(id, username, reason, debitValue)}
+    >
       <ListItemIcon>
         <LocalAtmIcon />
       </ListItemIcon>
@@ -63,40 +69,62 @@ export function List() {
     });
   };
 
-  const [users, setUsers] = React.useState<IClientUser[]>([]);
+  const [debits, setDebits] = React.useState<
+    {
+      id: string;
+      username: string;
+      reason: string;
+      debitValue: string;
+    }[]
+  >([]);
+
   React.useEffect(() => {
     const getUsers = async () => {
-      const { data } = await getUsersService();
+      const { data: users } = await getUsersService();
+      if (users && users.length > 0) {
+        // data = users
+        const values: any = [];
+        for (let i = 0; i < users.length - 1; i++) {
+          const usr = users[i];
+          const debit = debitList.find(deb => {
+            return usr.id === deb.idUsuario;
+          });
 
-      if (data && data.length > 0) {
-        setUsers(data);
+          if (debit) {
+            values.push({
+              id: `${debit._id}`,
+              username: usr.name,
+              reason: `${debit.motivo}`,
+              debitValue: `${debit.valor}`,
+            });
+          }
+        }
+        // users.map(usr => {
+
+        // });
+
+        setDebits(values);
       }
     };
-
     getUsers();
   }, []);
-
-  const getUser = React.useCallback(
-    (id: string) => {
-      return users.find(usr => usr.id === parseInt(id, 10));
-    },
-    [users],
-  );
 
   return (
     <>
       <MuiList component="ul">
-        {debitList.map((deb, key) => {
-          return (
-            <ItemList
-              key={key}
-              id={`${deb?.id}`}
-              username={getUser(`${deb?.idUsuario}`)?.name || ''}
-              debitValue={deb.valor.toString()}
-              openModal={openModal}
-            />
-          );
-        })}
+        {debits.length > 0 &&
+          debits.map((deb, key) => {
+            return (
+              <ItemList
+                key={key}
+                id={`${deb.id}`}
+                username={deb.username}
+                reason={deb.reason}
+                debitValue={deb.debitValue}
+                openModal={openModal}
+              />
+            );
+          })}
       </MuiList>
       <>
         <ModalDialog ref={modal} />
