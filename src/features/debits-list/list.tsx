@@ -40,9 +40,9 @@ export function ItemList(props: ItemListDebitProps) {
 
   return (
     <ListItem
+      onClick={() => spread(id, username, reason, debitValue)}
       component="li"
       button
-      onClick={() => spread(id, username, reason, debitValue)}
     >
       <ListItemIcon>
         <LocalAtmIcon />
@@ -82,7 +82,6 @@ export function List() {
     const getUsers = async () => {
       const { data: users } = await getUsersService();
       if (users && users.length > 0) {
-        // data = users
         const values: any = [];
         for (let i = 0; i < users.length - 1; i++) {
           const usr = users[i];
@@ -102,12 +101,11 @@ export function List() {
         // users.map(usr => {
 
         // });
-
         setDebits(values);
       }
     };
     getUsers();
-  }, []);
+  }, [debitList]);
 
   return (
     <>
@@ -125,6 +123,11 @@ export function List() {
               />
             );
           })}
+        {debits.length === 0 && (
+          <ListItem>
+            <ListItemText secondary="Sem Dívidas cadastradas!" />
+          </ListItem>
+        )}
       </MuiList>
       <>
         <ModalDialog ref={modal} />

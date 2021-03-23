@@ -16,7 +16,7 @@ export const styles = makeStyles(theme => ({
     height: '100%',
     width: '100%',
     overflow: 'hidden',
-    paddingBottom: 64,
+    paddingBottom: 120,
   },
   boxListPaperTitle: {
     padding: '16px 16px 8px 16px',
@@ -103,5 +103,12 @@ export const styles = makeStyles(theme => ({
     position: 'relative',
     top: -16,
     right: 16,
+  },
+  createDebitBox: {
+    zIndex: 2,
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    margin: 8,
   },
 }));
