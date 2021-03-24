@@ -11,12 +11,15 @@ export const styles = makeStyles(theme => ({
     borderRadius: 8,
     left: '50%',
     transform: 'translateX(-50%)',
+    boxSizing: 'border-box',
+    padding: 8,
   },
   boxListPaper: {
     height: '100%',
     width: '100%',
     overflow: 'hidden',
     paddingBottom: 120,
+    boxSizing: 'border-box',
   },
   boxListPaperTitle: {
     padding: '16px 16px 8px 16px',
@@ -109,6 +112,6 @@ export const styles = makeStyles(theme => ({
     position: 'absolute',
     bottom: 0,
     right: 0,
-    margin: 8,
+    margin: 16,
   },
 }));

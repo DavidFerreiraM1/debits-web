@@ -24,23 +24,30 @@ import { ModalDialog } from '../../components';
 import { useDebitListContext } from './list-context';
 import { getUsersService } from './services';
 import { formatMoney } from '../../utils/format-money';
+import { deleteDebitService } from '../debits-form/service';
+import { useAlertContext } from '../../components/alert';
+import { useDialogDetails } from './dialog-details';
 
 export function ItemList(props: ItemListDebitProps) {
   const { spread } = useBoxTransition();
+  const { open } = useDialogDetails();
   const { id, username, reason, debitValue, openModal } = props;
-  const onConfirm = () => {
+  const openModalHandler = () => {
     openModal(
       'Excluir Dívida',
-      `Confirmar exclusão da dívida de ${username.toUpperCase()} no valor de ${debitValue}?`,
-      () => {
-        // console.log('');
-      },
+      `Confirmar exclusão da dívida de ${username.toUpperCase()} no valor de ${formatMoney(
+        debitValue.toString(),
+      )}?`,
+      id,
     );
   };
 
   return (
     <ListItem
-      onClick={() => spread(id, username, reason, debitValue)}
+      onClick={() => {
+        open();
+        spread(id, username, reason, debitValue);
+      }}
       component="li"
       button
     >
@@ -49,7 +56,7 @@ export function ItemList(props: ItemListDebitProps) {
       </ListItemIcon>
       <ListItemText primary={username} secondary={formatMoney(debitValue)} />
       <ListItemSecondaryAction>
-        <IconButton onClick={onConfirm}>
+        <IconButton onClick={openModalHandler}>
           <DeleteIcon />
         </IconButton>
       </ListItemSecondaryAction>
@@ -59,13 +66,31 @@ export function ItemList(props: ItemListDebitProps) {
 
 export function List() {
   const modal = React.createRef<DialogRefProps>();
-  const { debitList } = useDebitListContext();
+  const { debitList, updateDebitList } = useDebitListContext();
+  const { retract } = useBoxTransition();
+  const { close } = useDialogDetails();
+  const { handleRenderAlert } = useAlertContext();
 
-  const openModal = (title: string, text: string, onConfirm: () => void) => {
+  const openModal = async (title: string, text: string, id: string) => {
+    retract();
+    close();
     modal.current?.open({
       title,
       text,
-      onConfirm,
+      onConfirm: () => {
+        const deleteDebit = async () => {
+          const { success } = await deleteDebitService(id);
+          if (success) {
+            updateDebitList();
+            modal.current?.close();
+            handleRenderAlert('success', 'Dívida excluída com sucesso!');
+          } else {
+            modal.current?.close();
+            handleRenderAlert('error', 'Não foi possível excluir a dívida!');
+          }
+        };
+        deleteDebit();
+      },
     });
   };
 
@@ -98,9 +123,6 @@ export function List() {
             });
           }
         }
-        // users.map(usr => {
-
-        // });
         setDebits(values);
       }
     };
@@ -125,7 +147,7 @@ export function List() {
           })}
         {debits.length === 0 && (
           <ListItem>
-            <ListItemText secondary="Sem Dívidas cadastradas!" />
+            <ListItemText secondary="Sem Dívidas para visualizar." />
           </ListItem>
         )}
       </MuiList>
