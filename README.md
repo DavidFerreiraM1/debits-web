@@ -10,8 +10,8 @@ um dos objetivos da aplicação também consiste em assegurar que o desenvolvedo
 
 ## Começando
 A aplicação utiliza variáveis de ambiente para apontar para as rotas dos backends <br />
-Ao fazer o clone da aplicação crie um arquivo <strong> .env </strong> a partir do arquivo <strong> .env.template </strong> encontrado na raiz do projeto.
-A variável de ambiente <strong>REACT_APP_UUID</strong> precisa ser solicidata pela empresa responsável por avaliar o teste
+Ao fazer o clone da aplicação crie um arquivo <strong> .env </strong> a partir do arquivo <strong> .env.template </strong> encontrado na raiz do projeto.<br />
+A chave <strong> uuid </strong> utilizada nas requisições feitas à https://provadev.xlab.digital/api/v1/divida/?uuid= precisa ser solicidata pela empresa responsável por avaliar o teste. De posse da chave uuid, é necessário apenas colocar como valor da variável de ambiente <strong>REACT_APP_UUID</strong> no arquivo .env.
 
 Após o passo anterior, execute os comandos abaixo
 ```
