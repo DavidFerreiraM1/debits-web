@@ -33,6 +33,7 @@ import { DebitsFormProps } from './interfaces';
 import { debitFormValidation } from './validations';
 import { styles } from './styles';
 import { useDebitListContext } from '../debits-list/list-context';
+import { useAlertContext } from '../../components/alert';
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & { children?: React.ReactElement },
@@ -57,6 +58,7 @@ export function DebitsFormProvider(props: DebitsFormProps) {
   const classes = styles();
   const { children } = props;
   const { updateDebitList } = useDebitListContext();
+  const { handleRenderAlert } = useAlertContext();
   const [open, setOpen] = React.useState(false);
   const [idDebit, setIdDebit] = React.useState('');
   const [options, setOptions] = React.useState<
@@ -83,6 +85,7 @@ export function DebitsFormProvider(props: DebitsFormProps) {
   };
 
   const handleClose = () => {
+    setIdDebit('');
     setOpen(false);
   };
 
@@ -113,6 +116,10 @@ export function DebitsFormProvider(props: DebitsFormProps) {
             updateDebitList();
             formik.resetForm();
             handleClose();
+            handleRenderAlert('success', 'Dívida atualizada com sucesso!');
+          } else {
+            handleClose();
+            handleRenderAlert('error', 'Não foi possível atualizar a dívida!');
           }
         };
 
@@ -135,6 +142,10 @@ export function DebitsFormProvider(props: DebitsFormProps) {
             updateDebitList();
             formik.resetForm();
             handleClose();
+            handleRenderAlert('success', 'Dívida criada com sucesso!');
+          } else {
+            handleClose();
+            handleRenderAlert('error', 'Não foi possível salvar a dívida!');
           }
         };
         postDebit();
@@ -209,6 +220,7 @@ export function DebitsFormProvider(props: DebitsFormProps) {
                 <InputLabel>User</InputLabel>
                 <AutoComplete
                   id="users"
+                  disabled={idDebit !== ''}
                   options={options}
                   getOptionLabel={opt => opt.label}
                   getOptionSelected={(opt, val) => opt.value === val.value}
@@ -271,7 +283,13 @@ export function DebitsFormProvider(props: DebitsFormProps) {
                 <Box className={classes.formBottom}>
                   <Box component="div" display="flex" justifyContent="flex-end">
                     <Box padding="0 8px">
-                      <Button variant="outlined" onClick={handleClose}>
+                      <Button
+                        variant="outlined"
+                        onClick={() => {
+                          formik.resetForm();
+                          handleClose();
+                        }}
+                      >
                         cancelar
                       </Button>
                     </Box>

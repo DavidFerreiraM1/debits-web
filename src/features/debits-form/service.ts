@@ -52,3 +52,14 @@ export async function putDebitService(
     return httpResponse<null>(false, 404, null, err);
   }
 }
+
+export async function deleteDebitService(
+  id: string,
+): Promise<IHttpResponse<null>> {
+  try {
+    const { status } = await DebitClientApi.delete(`/${id}/${uuid}`);
+    return httpResponse<null>(true, status, null, null);
+  } catch (err) {
+    return httpResponse<null>(false, 404, null, err);
+  }
+}
