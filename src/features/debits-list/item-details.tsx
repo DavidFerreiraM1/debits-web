@@ -1,19 +1,23 @@
 import React from 'react';
 import { Box, Button, IconButton, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import { styles } from './styles';
 import { useBoxTransition } from './box-transition';
 import { useDebitFormContext } from '../debits-form';
 import { formatMoney } from '../../utils/format-money';
+import { styles } from './styles';
+import { useDialogDetails } from './dialog-details';
 
 export function ItemDetails() {
   const { retract, dataDetails } = useBoxTransition();
+  const { close } = useDialogDetails();
   const { updateDebit } = useDebitFormContext();
 
   const classes = styles();
 
   const updateHandler = () => {
     if (dataDetails.id) {
+      retract();
+      close();
       updateDebit(dataDetails.id);
     }
   };
@@ -21,7 +25,12 @@ export function ItemDetails() {
   return (
     <Box className={classes.itemDetailsRoot}>
       <Box className={classes.itemDetailActionHeader}>
-        <IconButton onClick={retract}>
+        <IconButton
+          onClick={() => {
+            close();
+            retract();
+          }}
+        >
           <CloseIcon />
         </IconButton>
       </Box>

@@ -17,5 +17,9 @@ export interface ItemListDebitProps {
   username: string;
   reason: string;
   debitValue: string;
-  openModal(title: string, text: string, onConfirm: () => void): void;
+  openModal(title: string, text: string, id: string): void;
+}
+
+export interface DialogDetailsProviderProps {
+  children: React.ReactChild;
 }

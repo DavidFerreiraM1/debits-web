@@ -8,6 +8,7 @@ import { BoxTransitionProvider, useBoxTransition } from './box-transition';
 import { List } from './list';
 import { ItemDetails } from './item-details';
 import { ListContextProvider } from './list-context';
+import DialogDetailsProvider from './dialog-details';
 
 function DebitsListComponent() {
   const { transition } = useBoxTransition();
@@ -85,7 +86,9 @@ export const DebitsList = () => {
     <ListContextProvider>
       <DebitsFormProvider>
         <BoxTransitionProvider>
-          <DebitsListComponent />
+          <DialogDetailsProvider>
+            <DebitsListComponent />
+          </DialogDetailsProvider>
         </BoxTransitionProvider>
       </DebitsFormProvider>
     </ListContextProvider>
