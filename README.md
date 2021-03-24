@@ -1,46 +1,28 @@
-# Getting Started with Create React App
+# Debits Web
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Projeto se trata de uma aplicação web que consiste no cadastro de dívidas de uma lista de usuários cadastrados na api https://jsonplaceholder.typicode.com,
+um dos objetivos da aplicação também consiste em assegurar que o desenvolvedor responsável possui conhecimentos e habilidades para o bom desenvolvimento de uma aplicação web com ReactJs<br />
 
-## Available Scripts
+## Nota de Versões:
+* Node 14.15
+* React 17.0.1
+* Typescript 4.1.2
 
-In the project directory, you can run:
+## Começando
+A aplicação utiliza variáveis de ambiente para apontar para as rotas dos backends <br />
+Ao fazer o clone da aplicação crie um arquivo <strong> .env </strong> a partir do arquivo <strong> .env.template </strong> encontrado na raiz do projeto.
+A variável de ambiente <strong>REACT_APP_UUID</strong> precisa ser solicidata pela empresa responsável por avaliar o teste
 
-### `yarn start`
+Após o passo anterior, execute os comandos abaixo
+```
+yarn - para recuperar dependências do projeto
+yarn start - para excuta um server de desenvolvimento
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Sobre o App
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- Aplicação web responsiva
+- A aplicação permite o cadastro de dívidas, atualização de dados e exclusão dos dados das dívidas cadastradas. A aplicação também consome dados da api pública https://jsonplaceholder.typicode.com e https://provadev.xlab.digital/api/v1/divida.
+## Autor
 
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+* **David Ferreira**
