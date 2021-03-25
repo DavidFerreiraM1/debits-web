@@ -1,5 +1,5 @@
 import React from 'react';
 
 export interface DebitsFormProps {
-  children: React.ReactChild;
+  children?: React.ReactChild;
 }
